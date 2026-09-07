@@ -14,15 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Postman CLI
+      - name: Install and Run Postman Tests
         run: |
           curl -o- "https://config-cli.postman.com/scripts/install/install-linux.sh" | bash
-          echo "$HOME/.postman" >> $GITHUB_PATH
-
-      - name: Login to Postman CLI
-        run: |
+          export PATH="$HOME/.postman:/usr/local/bin:$PATH"
           postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-
-      - name: Run API tests
-        run: |
           postman collection run 57903648-bf2762de-bab4-4bc2-8e10-8d72c1874ff7 -e 57903648-2d2114a3-22d6-48dd-981b-933e2f582eb6
