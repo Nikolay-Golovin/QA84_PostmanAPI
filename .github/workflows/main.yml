@@ -17,9 +17,11 @@ jobs:
       - name: Install Postman CLI
         run: |
           curl -o- "https://config-cli.postman.com/scripts/install/install-linux.sh" | bash
+          echo "$HOME/.postman" >> $GITHUB_PATH
 
       - name: Login to Postman CLI
-        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+        run: |
+          postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
 
       - name: Run API tests
         run: |
