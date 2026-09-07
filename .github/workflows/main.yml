@@ -1,4 +1,4 @@
-name: Automated API tests using Postman CLI
+name: Automated API tests using Newman
 
 on:
   push:
@@ -14,9 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install and Run Postman Tests
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Run Newman Tests
         run: |
-          curl -o- "https://config-cli.postman.com/scripts/install/install-linux.sh" | bash
-          export PATH="$HOME/.postman:/usr/local/bin:$PATH"
-          postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-          postman collection run 57903648-bf2762de-bab4-4bc2-8e10-8d72c1874ff7 -e 57903648-2d2114a3-22d6-48dd-981b-933e2f582eb6
+          npx newman run "https://api.postman.com/collections/57903648-bf2762de-bab4-4bc2-8e10-8d72c1874ff7?apikey=${{ secrets.POSTMAN_API_KEY }}" -e "https://api.postman.com/environments/57903648-2d2114a3-22d6-48dd-981b-933e2f582eb6?apikey=${{ secrets.POSTMAN_API_KEY }}"
